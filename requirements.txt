@@ -1,0 +1,12 @@
+# File 1: requirements.txt
+nltk
+scikit-learn
+pandas
+numpy
+python-dotenv
+spacy
+flask
+gensim
+flask_cors
+keybert 
+sentence-transformers
