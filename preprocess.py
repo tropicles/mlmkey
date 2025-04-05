@@ -1,17 +1,36 @@
 import re
-import nltk
-nltk.download('stopwords')
-nltk.download('punkt')
-from nltk.corpus import stopwords
+import string
 
-stop_words = set(stopwords.words('english'))
+# Job-specific stopwords
+JOB_STOPWORDS = {
+    'job', 'position', 'work', 'working', 'company', 'candidate', 'candidates',
+    'experience', 'role', 'team', 'requirements', 'required', 'skills', 'ability',
+    'looking', 'qualified', 'must', 'responsibilities', 'responsible', 
+    'opportunity', 'opportunities', 'duties', 'duty', 'please', 'apply',
+    'email', 'resume', 'cover', 'letter', 'salary', 'applicant', 'applicants'
+}
 
 def clean_text(text):
-    # Remove unwanted characters and extra spaces
-    text = re.sub(r'[^a-zA-Z0-9\s]', ' ', text)
+    # Convert to lowercase
     text = text.lower()
-    text = re.sub(r'\s+', ' ', text)
-    return text.strip()
+    
+    # Remove punctuation
+    text = text.translate(str.maketrans('', '', string.punctuation))
+    
+    # Remove digits
+    text = re.sub(r'\d+', '', text)
+    
+    # Remove extra whitespace
+    text = re.sub(r'\s+', ' ', text).strip()
+    
+    return text
 
 def preprocess(text):
-    return clean_text(text)
+    # Clean the text
+    cleaned_text = clean_text(text)
+    
+    # Remove job-specific stopwords
+    words = cleaned_text.split()
+    filtered_words = [word for word in words if word not in JOB_STOPWORDS and len(word) > 1]
+    
+    return ' '.join(filtered_words)
